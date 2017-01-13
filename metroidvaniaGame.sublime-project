@@ -1,0 +1,21 @@
+{
+	"folders":
+	[
+		{
+			"path": "src/"
+		},
+		{
+			"folder_exclude_patterns":
+			[
+				"*"
+			],
+			"path": "."
+		}
+	],
+	"settings":
+	{
+		"default_line_ending": "windows",
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true
+	}
+}
