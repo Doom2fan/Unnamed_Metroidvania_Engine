@@ -8,3 +8,4 @@ dub.selections.json
 *.bak
 *.sublime-workspace
 *.log
+/docs/*

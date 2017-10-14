@@ -21,6 +21,7 @@ module actorDef;
 
 import dsfml.graphics;
 import gameDefs;
+import core.exception : RangeError;
 public import actors.actorFlags;
 public import player : PlayerPawn;
 public import particleSys : Particle, SpriteParticle;
@@ -50,6 +51,7 @@ interface IGameObject {
     @property accum Y    (); @property void Y    (accum val);
     @property accum XVel (); @property void XVel (accum val);
     @property accum YVel (); @property void YVel (accum val);
+    @property DirAngles Direction (); @property void Direction (DirAngles val);
     // Functions
     void tick ();
 }
@@ -68,6 +70,7 @@ class GameObject : IGameObject {
     // Physics and movement
     protected accum x,    y;    /// The actor's X-Y coordinates. These are at the center of the collision rectangle
     protected accum xVel, yVel; /// The actor's X-Y velocities
+    protected DirAngles dir;
 
     this () {
         x = 0; y = 0;
@@ -78,6 +81,8 @@ class GameObject : IGameObject {
     @property accum Y    () { return this.y;    } @property void Y    (accum val) { this.y    = val; }
     @property accum XVel () { return this.xVel; } @property void XVel (accum val) { this.xVel = val; }
     @property accum YVel () { return this.yVel; } @property void YVel (accum val) { this.yVel = val; }
+    @property DirAngles Direction () { return this.dir; }
+    @property void Direction (DirAngles val) { this.dir = val; }
 
     /// Ticks/updates the actor
     void tick () {
@@ -143,15 +148,14 @@ class Actor : GameObject, IDestructibleObj {
         if (gravity > 0f && y > 0f)
             yVel -= (flags & ObjFlags.NOINTERACTION) ? getLocalGravity () : getGravity ();
 
-        //if (y < 0f) y = 0f;
+        if (y < 0f) y = 0f;
         if (y <= 0f && yVel < 0f) yVel = 0f;
 
         doCollisionDetection ();
 
         prevX = x; prevY = y;
 
-        stTime--;
-        if (!stTime) {
+        if (--stTime <= 0) {
             changeState (states [state].next);
 
             while (!stTime)
@@ -160,6 +164,11 @@ class Actor : GameObject, IDestructibleObj {
     }
 
     void doMovement () {
+        /*if (abs (xVel) > width) {
+            x += xVel
+        } else {
+
+        }*/
         x += xVel;
         if (xVel != 0f && isColliding ()) {
             accum quarterWidth = this.width / 4.0f;

@@ -164,7 +164,7 @@ private void drawSprites (RenderTexture target) {
                 boundRect.fillColor = Color.Transparent;
                 boundRect.outlineColor = Color.Red;
                 boundRect.outlineThickness = 1.0f;
-                sprStates.transform.translate (cast (float) -(actor.width / 2.0f + 1.0f), cast (float) -actor.height);
+                sprStates.transform.translate (cast (float) -(actor.width / 2.0f + 1.0f), 0.0f);
                 target.draw (boundRect, sprStates);
             }
         }

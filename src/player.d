@@ -25,6 +25,7 @@ import gameDefs;
 
 enum PlayerControls : int {
     Attack = 1,
+    Jump   = 1 << 1,
 }
 
 class PlayerPawn : Actor {
@@ -32,7 +33,7 @@ class PlayerPawn : Actor {
     PlayerControls controls;
     accum forwardInput;
     accum sidewaysInput;
-    bool canJump;
+    bool canJump = true;;
 
     uint pID; /// Player id/number
 
@@ -43,7 +44,7 @@ class PlayerPawn : Actor {
     }
 
     override void tick () {
-        if (canJump && forwardInput > 0f) {
+        if (canJump && isControlPressed (PlayerControls.Jump)) {
             canJump = false;
             yVel += 25f;
         }

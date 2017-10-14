@@ -22,6 +22,7 @@ module gameDefs;
 public import std.random;
 public import std.stdio;
 public import dsfml.system;
+public import console;
 
 alias float accum;   /// Alias for a fixed-point value with 16 fractional bits (As my fixed-point type is currently broken, these are aliased to floating-point types)
 alias double accumL; /// Alias for a fixed-point value with 24 fractional bits
@@ -42,6 +43,18 @@ static int framesPerSec = 0; /// Frames per second
 static Duration avgRenderTime; /// Average render time per second in ms
 static const (accum) baseGravity = 4.91f;
 
+/++ Directions ++/
+enum DirAngles : byte {
+    Up        = 0,
+    UpRight   = 1,
+    Right     = 2,
+    DownRight = 3,
+    Down      = 4,
+    DownLeft  = 5,
+    Left      = 6,
+    UpLeft    = 7,
+}
+
 enum GameState {
     MainMenu = 0, // The player is in the main menu
     Intermission, // The player is reading an intermission screen
@@ -50,8 +63,9 @@ enum GameState {
     Paused,       // The player paused the game
     InConsole,    // The player is using the console
 }
-static class GameInfo {
+
+static struct GameInfo {
     static bool focused = true; /// Is the game focused?
     static GameState state = GameState.MainMenu;
-
+    static CVar!(bool, "pauseWhenUnfocused") pauseWhenUnfocused;
 }

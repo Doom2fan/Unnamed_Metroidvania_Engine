@@ -24,8 +24,10 @@ import dsfml.audio;
 import dsfml.graphics;
 import dsfml.window;
 import gameDefs;
+import utils;
 import actorDef;
 import particleSys;
+import player;
 static import core.stdc.stdlib;
 
 Texture derp;
@@ -66,14 +68,34 @@ void gameInit () {
     monstah.X = 320; monstah.Y = 200;
     monstah.changeStateList (testStates, testStateLabels);
     ActorList ~= monstah;
+
+    GameInfo.state = GameState.InGame;
 }
 
 /++ Ticks/updates the playsim ++/
 void updateGame (Duration elapsedTime) {
-    particleSystem.tick ();
+    updateControls (elapsedTime);
+    updateWorld (elapsedTime);
+}
 
+void updateWorld (Duration elapsedTime) {
+    if (GameInfo.state == GameState.InGame && !isGamePaused ()) {
+        particleSystem.tick ();
+
+        // Tick actors
+        foreach (obj; ActorList) {
+            if (!obj)
+                continue;
+
+            obj.tick ();
+        }
+    }
+}
+
+void updateControls (Duration elapsedTime) {
     // Get player input
     localPlayer.sidewaysInput = 0; localPlayer.forwardInput = 0;
+    localPlayer.controls = cast (PlayerControls) 0;
     if (Joystick.isConnected (0)) {
         localPlayer.sidewaysInput =  Joystick.getAxisPosition (0, Joystick.Axis.X);
         localPlayer.forwardInput  = -Joystick.getAxisPosition (0, Joystick.Axis.Y);
@@ -89,14 +111,9 @@ void updateGame (Duration elapsedTime) {
     if (Keyboard.isKeyPressed (Keyboard.Key.A) || Keyboard.isKeyPressed (Keyboard.Key.Left))
         localPlayer.sidewaysInput += -100;
 
+    if (Keyboard.isKeyPressed (Keyboard.Key.Space))
+        localPlayer.controls |= PlayerControls.Jump;
+
     if (Keyboard.isKeyPressed (Keyboard.Key.Escape))
         core.stdc.stdlib.exit (0);
-
-    // Tick actors
-    foreach (obj; ActorList) {
-        if (!obj)
-            continue;
-
-        obj.tick ();
-    }
 }

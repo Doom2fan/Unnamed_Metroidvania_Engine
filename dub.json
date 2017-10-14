@@ -9,9 +9,14 @@
     "targetPath": "bin",
     "sourcePaths": [ "src" ],
 
-    "lflags": [ "+lib\\" ],
-
-    "buildOptions": [ "debugInfoC" ],
+    "lflags": [
+        "+lib\\",
+        "+dsfmlc-audio",
+        "+dsfmlc-graphics",
+        "+dsfmlc-network",
+        "+dsfmlc-system",
+        "+dsfmlc-window",
+    ],
 
     "dependencies": {
         "dsfml": "~>2.3",
