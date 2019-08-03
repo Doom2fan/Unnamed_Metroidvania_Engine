@@ -58,18 +58,16 @@ class PlayerPawn : Actor {
     override void doMovement () {
         accum xChange = xVel + (sidewaysInput / 100) * 15;
         x += xChange;
+        y += yVel;
         if (xChange != 0f && isColliding ()) {
             accum quarterWidth = this.width / 4.0f;
             accum xUndo = (abs (prevX - x) <= quarterWidth * 2 ? 1f : quarterWidth) * (xChange > 0f ? 1.0f : -1.0f);
-            while (isColliding ())
-                x -= xUndo;
-        }
-        y += yVel;
-        if (yVel != 0f && isColliding ()) {
             accum quarterHeight = this.height / 4.0f;
             accum yUndo = (abs (prevY - y) <= quarterHeight * 2 ? 1f : quarterHeight) * (yVel > 0f ? 1.0f : -1.0f);
-            while (isColliding ())
+            while (isColliding ()) {
+                x -= xUndo;
                 y -= yUndo;
+            }
         }
     }
 

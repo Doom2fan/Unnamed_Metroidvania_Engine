@@ -1,0 +1,9 @@
+{
+    "name": "metroidvaniagame",
+    "description": "A metroidvania made with DSFML.",
+    "projects": {
+        "metroidvaniagame": "dub.json"
+    },
+    "includePath": {
+    }
+}
