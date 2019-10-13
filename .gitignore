@@ -9,3 +9,4 @@ dub.selections.json
 *.sublime-workspace
 *.log
 /docs/*
+*.dlangidews.wssettings
